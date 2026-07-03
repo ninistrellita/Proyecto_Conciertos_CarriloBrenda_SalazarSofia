@@ -24,7 +24,14 @@ nav {
 }
 
 .user {
-    height: 60px;
+    height: 50px;
+    width: auto;
+    display: block;
+    cursor: pointer;
+}
+
+.carrito {
+    height: 40px;
     width: auto;
     display: block;
     cursor: pointer;
@@ -79,3 +86,101 @@ nav {
     transform-origin: bottom left;
 }
 
+.eventos-principales {
+    position: relative;
+    width: 100vw;
+    height: 600px;
+    overflow: hidden;
+    border: #b90000 solid;
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.evento-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s;
+}
+
+.evento-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.puntos-navegacion {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.punto {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.punto.active {
+    background-color: #e00000;
+    transform: scale(1.2);
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row; 
+    justify-content: center; 
+    gap: 40px; 
+    flex-wrap: wrap; 
+   
+}
+
+.card {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    width: 200px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    transition: all 0.3s ease;
+    margin-top: 50px;
+}
+
+.card img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+button {
+    background-color: #b90000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #e00000;
+    transform: scale(1.05);
+}
