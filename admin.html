@@ -3,127 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Administración</title>
+    <title>Conciertos Conectados - Panel de Administración</title>
     <link rel="stylesheet" href="CSS/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <div class="dashboard-container">
-        
+
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="profile-avatar">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
+                <div class="profile-avatar"><i class="fa-solid fa-user-gear"></i></div>
                 <h3>Admin Panel</h3>
-                <p> admin@mail.com</p>
+                <p>admin@mail.com</p>
             </div>
-            
+
             <nav class="sidebar-menu">
                 <ul>
-                    <li class="active"><a href="admin.html"><i class="fa-solid fa-chart-pie"></i> Inicio</a></li>
-                    <li><a href="views/categorias.html"><i class="fa-solid fa-tags"></i> Categorías</a></li>
-                    <li><a href="views/eventos.html"><i class="fa-solid fa-calendar-days"></i> Eventos</a></li>
-                    <li><a href="views/ventas.html"><i class="fa-solid fa-cart-shopping"></i> Ventas</a></li>
+                    <li class="menu-item active" data-target="inicio">
+                        <a href="#inicio"><i class="fa-solid fa-chart-pie"></i> Inicio</a>
+                    </li>
+                    <li class="menu-item" data-target="categorias">
+                        <a href="#categorias"><i class="fa-solid fa-tags"></i> Categorías</a>
+                    </li>
+                    <li class="menu-item" data-target="eventos">
+                        <a href="#eventos"><i class="fa-solid fa-calendar-days"></i> Eventos</a>
+                    </li>
+                    <li class="menu-item" data-target="ventas">
+                        <a href="#ventas"><i class="fa-solid fa-cart-shopping"></i> Ventas</a>
+                    </li>
                 </ul>
             </nav>
+
+            <button id="btn-reiniciar-datos" class="btn-reset-datos" title="Restaura los datos de ejemplo y borra el localStorage">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar datos
+            </button>
+            <button id="btn-logout" class="btn-reset-datos" style="margin-top:0.6rem;">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            </button>
         </aside>
 
         <main class="main-content">
-            
+
             <header class="main-header">
-                <h2>Dashboard General</h2>
-                <div class="menu-toggle"><i class="fa-solid fa-bars"></i></div>
+                <h2 id="page-title">Dashboard General</h2>
+                <div class="menu-toggle" id="menu-toggle"><i class="fa-solid fa-bars"></i></div>
             </header>
 
-            <section class="metrics-grid">
-                <div class="card metric-card">
-                    <div class="metric-icon categories-icon"><i class="fa-solid fa-tags"></i></div>
-                    <div class="metric-info">
-                        <h3>Categorías</h3>
-                        <p class="metric-value"></p>
+            <div id="section-inicio" class="dashboard-section active-section">
+                <section class="metrics-grid">
+                    <div class="card metric-card">
+                        <div class="metric-icon categories-icon"><i class="fa-solid fa-tags"></i></div>
+                        <div class="metric-info"><h3>Categorías</h3><p class="metric-value" id="metric-categorias">0</p></div>
                     </div>
-                </div>
-                <div class="card metric-card">
-                    <div class="metric-icon events-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                    <div class="metric-info">
-                        <h3>Eventos Activos</h3>
-                        <p class="metric-value"></p>
+                    <div class="card metric-card">
+                        <div class="metric-icon events-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="metric-info"><h3>Eventos Activos</h3><p class="metric-value" id="metric-eventos">0</p></div>
                     </div>
-                </div>
-                <div class="card metric-card">
-                    <div class="metric-icon sales-icon"><i class="fa-solid fa-dollar-sign"></i></div>
-                    <div class="metric-info">
-                        <h3>Ventas Totales</h3>
-                        <p class="metric-value"></p>
+                    <div class="card metric-card">
+                        <div class="metric-icon sales-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                        <div class="metric-info"><h3>Ventas Totales</h3><p class="metric-value" id="metric-ventas">$0</p></div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section class="content-management">
-                
-                <div class="card data-table-card">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-clock-history"></i> Próximos Eventos y Ventas Recientes</h3>
-                        <button class="btn-action">Ver todo</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Evento</th>
-                                    <th>Categoría</th>
-                                    <th>Ventas</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><span class="status status-warning">Pendiente</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card Summary-card">
-                    <h3>Meta de Ventas</h3>
-                    <div class="progress-circle-container">
-                        <div class="progress-circle">
-                            <span class="progress-value"></span>
+                <section class="content-management">
+                    <div class="card data-table-card">
+                        <div class="card-header"><h3><i class="fa-solid fa-cart-shopping"></i> Ventas Recientes</h3></div>
+                        <div class="table-responsive">
+                            <table id="table-recientes">
+                                <thead><tr><th>ID Venta</th><th>Cliente</th><th>Ciudad</th><th>Total</th><th>Fecha</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-                    <ul class="summary-list">
-                        <li><span>Categorías optimizadas</span> <strong></strong></li>
-                        <li><span>Entradas vendidas</span> <strong></strong></li>
-                    </ul>
-                </div>
+                    <div class="card Summary-card">
+                        <h3>Meta de Ventas</h3>
+                        <div class="progress-circle-container">
+                            <div class="progress-circle" id="progress-circle-bar"><span class="progress-value" id="progress-text">0%</span></div>
+                        </div>
+                        <ul class="summary-list">
+                            <li><span>Progreso Recaudado</span> <strong id="summary-recaudado">$0</strong></li>
+                            <li><span>Meta del Sistema</span> <strong id="summary-meta">$0</strong></li>
+                        </ul>
+                    </div>
+                </section>
 
-            </section>
+                <section class="content-management">
+                    <div class="card data-table-card">
+                        <div class="card-header"><h3><i class="fa-solid fa-calendar-days"></i> Eventos Recientes</h3></div>
+                        <div class="table-responsive">
+                            <table id="table-eventos-recientes">
+                                <thead><tr><th>Evento</th><th>Categoría</th><th>Ciudad</th><th>Fecha</th><th>Precio</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card data-table-card">
+                        <div class="card-header"><h3><i class="fa-solid fa-tags"></i> Categorías</h3></div>
+                        <div id="container-categorias-inicio" class="grid-categorias-mini"></div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="section-categorias" class="dashboard-section visual-hidden">
+                <div class="section-header-actions">
+                    <h3>Lista General de Categorías</h3>
+                    <button class="btn-action" id="btn-add-categoria"><i class="fa-solid fa-plus"></i> Agregar Categoría</button>
+                </div>
+                <div id="container-categorias" class="grid-categorias"></div>
+            </div>
+
+            <div id="section-eventos" class="dashboard-section visual-hidden">
+                <div class="split-layout">
+                    <div class="card">
+                        <h3 id="form-eventos-titulo"><i class="fa-solid fa-calendar-plus"></i> Registrar Nuevo Evento</h3>
+                        <form id="form-eventos" class="admin-form">
+                            <input type="hidden" id="ev-id">
+                            <div class="form-group">
+                                <label for="ev-codigo">Código</label>
+                                <input type="text" id="ev-codigo" required placeholder="Ej: EVT-005">
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-nombre">Nombre del Evento</label>
+                                <input type="text" id="ev-nombre" required placeholder="Ej: Concierto de Rock">
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-categoria">Categoría</label>
+                                <select id="ev-categoria" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-precio">Precio Ticket ($)</label>
+                                <input type="number" id="ev-precio" min="0" required placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-fecha">Fecha</label>
+                                <input type="date" id="ev-fecha" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-hora">Hora</label>
+                                <input type="time" id="ev-hora" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-ciudad">Ciudad</label>
+                                <select id="ev-ciudad" required>
+                                    <option value="" disabled selected>Seleccione ciudad</option>
+                                    <option value="Barranquilla">Barranquilla</option>
+                                    <option value="Bogotá">Bogotá</option>
+                                    <option value="Bucaramanga">Bucaramanga</option>
+                                    <option value="Medellín">Medellín</option>
+                                    <option value="Cucuta">Cucuta</option>
+                                    <option value="Cali">Cali</option>
+                                    <option value="Cartagena">Cartagena</option>
+                                    <option value="Pereira">Pereira</option>
+                                    <option value="Santa Marta">Santa Marta</option>
+                                    <option value="Villavicencio">Villavicencio</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-imagen">Imagen</label>
+                                <input type="file" id="ev-imagen">
+                            </div>
+                            <div class="form-group">
+                                <label for="ev-descripcion">Descripción</label>
+                                <textarea id="ev-descripcion" rows="3" required placeholder="Breve descripción del evento"></textarea>
+                            </div>
+                            <button type="submit" class="btn-action btn-full" id="btn-guardar-evento">Guardar Evento</button>
+                            <button type="button" class="btn-secundario btn-full" id="btn-cancelar-edicion-evento" style="display:none;">Cancelar edición</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Eventos Registrados</h3>
+                        <div id="container-eventos-lista" class="scrollable-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-ventas" class="dashboard-section visual-hidden">
+                <div class="section-header-actions">
+                    <h3>Registro de Historial de Ventas</h3>
+                </div>
+                <div class="table-responsive card">
+                    <table id="table-ventas-completa">
+                        <thead><tr><th>ID Venta</th><th>Fecha</th><th>Ciudad</th><th>Cliente</th><th>Total</th><th></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
 
         </main>
     </div>
 
+    <app-modal id="modal-categoria" titulo="Agregar Categoría">
+        <form id="form-categoria" class="admin-form">
+            <input type="hidden" id="cat-id">
+            <div class="form-group">
+                <label for="cat-nombre">Nombre</label>
+                <input type="text" id="cat-nombre" required placeholder="Ej: Música">
+            </div>
+            <div class="form-group">
+                <label for="cat-descripcion">Descripción</label>
+                <textarea id="cat-descripcion" rows="3" required placeholder="Breve descripción de la categoría"></textarea>
+            </div>
+            <button type="submit" class="btn-action btn-full">Guardar Categoría</button>
+        </form>
+    </app-modal>
+
+    <app-modal id="modal-detalle-venta" titulo="Detalle del Pedido">
+        <div id="detalle-venta-contenido"></div>
+    </app-modal>
+
+    <script src="JS/store.js"></script>
+    <script src="JS/components.js"></script>
     <script src="JS/admin.js"></script>
 </body>
 </html>

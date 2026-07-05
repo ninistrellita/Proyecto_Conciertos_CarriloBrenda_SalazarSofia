@@ -1,0 +1,93 @@
+{
+  "categorias": [
+    { "id": "cat-1", "nombre": "Música", "descripcion": "Conciertos y festivales musicales de todos los géneros." },
+    { "id": "cat-2", "nombre": "Cultura", "descripcion": "Exposiciones, teatro y actividades culturales." },
+    { "id": "cat-3", "nombre": "Deportes", "descripcion": "Eventos deportivos y competencias en vivo." },
+    { "id": "cat-4", "nombre": "Entretenimiento", "descripcion": "Comedia, shows y espectáculos familiares." }
+  ],
+  "eventos": [
+    {
+      "id": "ev-1",
+      "codigo": "EVT-001",
+      "nombre": "Festival de Rock Al Parque",
+      "categoria": "Música",
+      "precio": 45000,
+      "fecha": "2026-11-15",
+      "hora": "18:00",
+      "ciudad": "Bogotá",
+      "imagen": "https://picsum.photos/id/1025/500/300",
+      "descripcion": "Un festival al aire libre con las mejores bandas de rock nacionales e internacionales."
+    },
+    {
+      "id": "ev-2",
+      "codigo": "EVT-002",
+      "nombre": "Exposición de Arte Moderno",
+      "categoria": "Cultura",
+      "precio": 15000,
+      "fecha": "2026-08-22",
+      "hora": "10:00",
+      "ciudad": "Medellín",
+      "imagen": "https://picsum.photos/id/1043/500/300",
+      "descripcion": "Una muestra itinerante de artistas contemporáneos latinoamericanos."
+    },
+    {
+      "id": "ev-3",
+      "codigo": "EVT-003",
+      "nombre": "Final de Copa Local",
+      "categoria": "Deportes",
+      "precio": 25000,
+      "fecha": "2026-09-10",
+      "hora": "16:00",
+      "ciudad": "Barranquilla",
+      "imagen": "https://picsum.photos/id/1062/500/300",
+      "descripcion": "La gran final del torneo de fútbol regional en el estadio metropolitano."
+    },
+    {
+      "id": "ev-4",
+      "codigo": "EVT-004",
+      "nombre": "Noche de Stand Up Comedy",
+      "categoria": "Entretenimiento",
+      "precio": 20000,
+      "fecha": "2026-07-30",
+      "hora": "20:00",
+      "ciudad": "Bucaramanga",
+      "imagen": "https://picsum.photos/id/1074/500/300",
+      "descripcion": "Los mejores comediantes del país en una noche llena de risas."
+    }
+  ],
+  "ventas": [
+    {
+      "id": "V-9901",
+      "fecha": "2026-07-02T15:30:00",
+      "ciudad": "Bogotá",
+      "cliente": {
+        "identificacion": "1020304050",
+        "nombre": "Laura Gómez",
+        "direccion": "Calle 45 #12-30",
+        "telefono": "3001234567",
+        "email": "laura.gomez@mail.com"
+      },
+      "items": [
+        { "eventoId": "ev-1", "nombre": "Festival de Rock Al Parque", "precioUnit": 45000, "cantidad": 2, "subtotal": 90000 }
+      ],
+      "total": 90000
+    },
+    {
+      "id": "V-9902",
+      "fecha": "2026-07-04T09:10:00",
+      "ciudad": "Medellín",
+      "cliente": {
+        "identificacion": "1122334455",
+        "nombre": "Carlos Pérez",
+        "direccion": "Carrera 70 #34-12",
+        "telefono": "3109876543",
+        "email": "carlos.perez@mail.com"
+      },
+      "items": [
+        { "eventoId": "ev-2", "nombre": "Exposición de Arte Moderno", "precioUnit": 15000, "cantidad": 1, "subtotal": 15000 }
+      ],
+      "total": 15000
+    }
+  ],
+  "metaVentas": 600000
+}
