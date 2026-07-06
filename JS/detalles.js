@@ -1,33 +1,24 @@
-/**
- * detalle-controlador.js
- * Capta dinámicamente los parámetros Query de la URL e inyecta la información.
- */
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Cargamos los datos compartidos desde el Store
     const appData = await Store.cargar();
     
-    // 2. Extraemos el 'id' enviado desde la URL (?id=ev-xxx)
     const urlParams = new URLSearchParams(window.location.search);
     const eventoId = urlParams.get('id');
 
-    // 3. Buscamos el concierto correspondiente en tu localStorage compartido
-    const evento = appData.eventos.find(ev => ev.id === eventoId);
     const contenedor = document.getElementById('vista-detalle');
-
     if (!contenedor) return;
 
-    // Si el ID es inválido o se alteró manualmente la URL
+    const evento = appData && appData.eventos ? appData.eventos.find(ev => ev.id === eventoId) : null;
+
     if (!evento) {
         contenedor.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 4rem 0;">
                 <h2 style="font-size: 2rem; color: #1e293b; margin-bottom: 1rem;">🎟️ Evento no encontrado</h2>
-                <p style="color: #64748b; margin-bottom: 2rem;">El espectáculo seleccionado no existe en el catálogo actual.</p>
+                <p style="color: #64748b; margin-bottom: 2rem;">El espectáculo seleccionado no existe o no se especificó un ID válido en la URL.</p>
                 <a href="Index.html" class="btn-regresar-catalogo"><i class="fa-solid fa-arrow-left"></i> Volver a la Tienda</a>
             </div>`;
         return;
     }
 
-    // 4. Pintamos la estructura con los datos exactos e imágenes subidas (Ruta local o Base64)
     contenedor.innerHTML = `
         <div class="detalle-imagen">
             <img src="${evento.imagen ? evento.imagen : Store.IMAGE_PLACEHOLDER}" alt="${evento.nombre}" id="img-target">
@@ -48,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
     `;
 
-    // Respaldo seguro si la imagen falla en renderizar
     const imgTarget = document.getElementById('img-target');
     if (imgTarget) {
         imgTarget.onerror = function () {
@@ -56,12 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
     }
 
-    // 5. Conectamos el botón con las operaciones compartidas de tu archivo carrito-compartido.js
     const btnAgregar = document.getElementById('btn-agregar-detalle');
     if (btnAgregar) {
         btnAgregar.addEventListener('click', () => {
             Store.agregarAlCarrito(evento);
-            // Disparar evento para actualizar instantáneamente el contador numérico del header
             window.dispatchEvent(new CustomEvent('carritoActualizado'));
             alert(`"${evento.nombre}" se agregó con éxito al carrito.`);
         });
