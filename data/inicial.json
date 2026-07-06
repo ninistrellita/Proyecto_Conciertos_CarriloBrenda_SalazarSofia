@@ -15,7 +15,7 @@
       "fecha": "17 de Julio",
       "hora": "7:30 PM",
       "ciudad": "Cúcuta",
-      "imagen": "evento1.jpeg",
+      "imagen": "/img/img_eventos_principales/evento1.jpeg",
       "descripcion": "Show de Stand-Up Comedy Organiza Like Entretenimiento. Info: 304 200 9545.",
       "pulep": "GHD641"
     },
@@ -28,7 +28,7 @@
       "fecha": "Sábado 11 de Julio",
       "hora": "N/A",
       "ciudad": "Cúcuta",
-      "imagen": "evento2.jpg",
+      "imagen": "/img/img_eventos_principales/evento2.jpeg",
       "descripcion": "Macro Efectus Vs Tridimension. Puntos de venta: Nuestro Ticket, Hotel Ibis, Planeta Store.",
       "pulep": "HEI695"
     },
@@ -41,7 +41,7 @@
       "fecha": "Sábado 7 de Noviembre",
       "hora": "8:00 PM",
       "ciudad": "Cúcuta",
-      "imagen": "evento3.jpeg",
+      "imagen": "/img/img_eventos_principales/evento3.jpeg",
       "descripcion": "Show de comedia stand-up en vivo en el Teatro Zulima.",
       "pulep": "SSD351"
     },
@@ -54,7 +54,7 @@
       "fecha": "5 Sept 2026",
       "hora": "7:00 PM",
       "ciudad": "Cúcuta",
-      "imagen": "evento4.jpg",
+      "imagen": "/img/img_eventos_principales/evento4.jpeg",
       "descripcion": "Invitados: Madiel Lara y El Sielvo Lio. Apoya Faro Loop y Sayco. Teléfono: 6019171010.",
       "pulep": "VRU423"
     },
@@ -67,7 +67,7 @@
       "fecha": "28 Noviembre 2026",
       "hora": "7:00 PM",
       "ciudad": "Bucaramanga",
-      "imagen": "evento5.jpg",
+      "imagen": "/img/img_eventos_principales/evento5.jpeg",
       "descripcion": "Billo's Caracas Boys VS Los Melódicos de Renato Capriles. Fenómenos Sabaneros.",
       "pulep": "DBY711"
     },
@@ -80,7 +80,7 @@
       "fecha": "Viernes 14 Agosto",
       "hora": "N/A",
       "ciudad": "Cúcuta",
-      "imagen": "evento6.jpg",
+      "imagen": "/img/img_eventos_principales/evento6.jpeg",
       "descripcion": "Produce Vargas Music en el Teatro Zulima. Inf: 311 256 8583.",
       "pulep": "TRT436"
     },
@@ -93,7 +93,7 @@
       "fecha": "24 Octubre",
       "hora": "N/A",
       "ciudad": "Cúcuta",
-      "imagen": "evento7.jpg",
+      "imagen": "/img/img_eventos_principales/evento7.jpeg",
       "descripcion": "Espectacular concierto conmemorativo de sus 35 años de trayectoria musical.",
       "pulep": "YOX192"
     },
@@ -106,7 +106,7 @@
       "fecha": "2026-10-02 / 2026-10-03",
       "hora": "N/A",
       "ciudad": "Bogotá",
-      "imagen": "evento8.jpeg",
+      "imagen": "/img/img_eventos_principales/evento8.jpeg",
       "descripcion": "BTS World Tour Arirang en vivo desde el Estadio El Campín de Bogotá (Vie y Sáb).",
       "pulep": "JUS369"
     }
