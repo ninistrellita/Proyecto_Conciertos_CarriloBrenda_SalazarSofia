@@ -7,7 +7,7 @@
  */
 window.Store = (function () {
     const STORAGE_KEY = 'app_dashboard_data';
-    const CIUDADES = ['Barranquilla', 'Bogotá', 'Bucaramanga', 'Medellín'];
+    const CIUDADES = ['Barranquilla', 'Bogotá', 'Bucaramanga', 'Medellín', 'Pereira', 'Santa Marta', 'Valledupar' , 'Villavicencio' , 'Cali', 'Cartagena', 'Cúcuta'];
 
     let appData = {
         categorias: [],
@@ -43,7 +43,7 @@ window.Store = (function () {
                 appData = JSON.parse(localData);
                 return appData;
             } catch (e) {
-                console.warn('LocalStorage corrupto, recargando desde JSON.');
+                console.error('Error al parsear app_dashboard_data', e);
             }
         }
         await cargarDesdeJSON();
@@ -52,43 +52,26 @@ window.Store = (function () {
 
     function guardar() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        window.dispatchEvent(new CustomEvent('datosActualizados', { detail: appData }));
     }
 
     function obtenerDatos() {
         return appData;
     }
 
-    async function reiniciar() {
+    function reiniciar() {
         localStorage.removeItem(STORAGE_KEY);
-        await cargarDesdeJSON();
-        return appData;
+        location.reload();
     }
 
-    // Escucha cambios hechos desde otra pestaña (por ejemplo admin abierto aparte)
-    window.addEventListener('storage', (e) => {
-        if (e.key === STORAGE_KEY && e.newValue) {
-            try {
-                appData = JSON.parse(e.newValue);
-                window.dispatchEvent(new CustomEvent('datosActualizados', { detail: appData }));
-            } catch (err) { /* ignore */ }
-        }
-    });
-
-    // ------------------ CARRITO DE COMPRAS ------------------
-    const CART_KEY = 'carrito_actual';
+    /* --- GESTIÓN DEL CARRITO (LÓGICA CLIENTE) --- */
+    const CARRITO_KEY = 'app_carrito_data';
 
     function obtenerCarrito() {
-        try {
-            return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-        } catch (e) {
-            return [];
-        }
+        return JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
     }
 
     function guardarCarrito(carrito) {
-        localStorage.setItem(CART_KEY, JSON.stringify(carrito));
-        window.dispatchEvent(new CustomEvent('carritoActualizado', { detail: carrito }));
+        localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
     }
 
     function agregarAlCarrito(evento) {
@@ -137,6 +120,7 @@ window.Store = (function () {
     return {
         STORAGE_KEY,
         CIUDADES,
+        IMAGE_PLACEHOLDER: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23cccccc'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%23666666'>Sin Imagen</text></svg>",
         cargar,
         guardar,
         obtenerDatos,

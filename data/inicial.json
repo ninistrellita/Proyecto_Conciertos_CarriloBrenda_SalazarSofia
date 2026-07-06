@@ -8,51 +8,39 @@
   "eventos": [
     {
       "id": "ev-1",
-      "codigo": "EVT-001",
-      "nombre": "Festival de Rock Al Parque",
+      "codigo": "MORAT-2026",
+      "nombre": "Morat - Antes de que Amanezca",
       "categoria": "Música",
-      "precio": 45000,
-      "fecha": "2026-11-15",
-      "hora": "18:00",
+      "precio": 120000,
+      "fecha": "2026-10-18",
+      "hora": "19:30",
       "ciudad": "Bogotá",
-      "imagen": "https://picsum.photos/id/1025/500/300",
-      "descripcion": "Un festival al aire libre con las mejores bandas de rock nacionales e internacionales."
+      "imagen": "evento6.jpg",
+      "descripcion": "La banda de pop rock en español más importante del momento presenta su espectacular gira de estadios."
     },
     {
       "id": "ev-2",
-      "codigo": "EVT-002",
-      "nombre": "Exposición de Arte Moderno",
-      "categoria": "Cultura",
-      "precio": 15000,
-      "fecha": "2026-08-22",
-      "hora": "10:00",
+      "codigo": "FEID-2026",
+      "nombre": "Feid - Ferxxocalipsis Tour",
+      "categoria": "Música",
+      "precio": 150000,
+      "fecha": "2026-11-05",
+      "hora": "20:00",
       "ciudad": "Medellín",
-      "imagen": "https://picsum.photos/id/1043/500/300",
-      "descripcion": "Una muestra itinerante de artistas contemporáneos latinoamericanos."
+      "imagen": "evento7.jpg",
+      "descripcion": "El Ferxxo llega con el perreo más grande del año y una puesta en escena apocalíptica e inolvidable."
     },
     {
       "id": "ev-3",
-      "codigo": "EVT-003",
-      "nombre": "Final de Copa Local",
-      "categoria": "Deportes",
-      "precio": 25000,
-      "fecha": "2026-09-10",
-      "hora": "16:00",
-      "ciudad": "Barranquilla",
-      "imagen": "https://picsum.photos/id/1062/500/300",
-      "descripcion": "La gran final del torneo de fútbol regional en el estadio metropolitano."
-    },
-    {
-      "id": "ev-4",
-      "codigo": "EVT-004",
-      "nombre": "Noche de Stand Up Comedy",
-      "categoria": "Entretenimiento",
-      "precio": 20000,
-      "fecha": "2026-07-30",
-      "hora": "20:00",
-      "ciudad": "Bucaramanga",
-      "imagen": "https://picsum.photos/id/1074/500/300",
-      "descripcion": "Los mejores comediantes del país en una noche llena de risas."
+      "codigo": "DUA-2026",
+      "nombre": "Dua Lipa - Radical Optimism Tour",
+      "categoria": "Música",
+      "precio": 280000,
+      "fecha": "2026-12-12",
+      "hora": "21:00",
+      "ciudad": "Bogotá",
+      "imagen": "evento8.jpeg",
+      "descripcion": "La superestrella del pop británico llega para encender el escenario con sus mayores éxitos globales."
     }
   ],
   "ventas": [
@@ -68,26 +56,10 @@
         "email": "laura.gomez@mail.com"
       },
       "items": [
-        { "eventoId": "ev-1", "nombre": "Festival de Rock Al Parque", "precioUnit": 45000, "cantidad": 2, "subtotal": 90000 }
+        { "eventoId": "ev-1", "nombre": "Morat - Antes de que Amanezca", "precioUnit": 120000, "cantidad": 2, "subtotal": 240000 }
       ],
-      "total": 90000
-    },
-    {
-      "id": "V-9902",
-      "fecha": "2026-07-04T09:10:00",
-      "ciudad": "Medellín",
-      "cliente": {
-        "identificacion": "1122334455",
-        "nombre": "Carlos Pérez",
-        "direccion": "Carrera 70 #34-12",
-        "telefono": "3109876543",
-        "email": "carlos.perez@mail.com"
-      },
-      "items": [
-        { "eventoId": "ev-2", "nombre": "Exposición de Arte Moderno", "precioUnit": 15000, "cantidad": 1, "subtotal": 15000 }
-      ],
-      "total": 15000
+      "total": 240000
     }
   ],
-  "metaVentas": 600000
+  "metaVentas": 5000000
 }

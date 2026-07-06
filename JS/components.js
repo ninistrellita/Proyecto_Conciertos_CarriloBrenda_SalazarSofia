@@ -1,8 +1,8 @@
 /**
  * components.js
  * Web Components reutilizables construidos con Shadow DOM.
- *  - <app-modal>   : modal genérico con slot, usado para formularios y detalles.
- *  - <evento-card> : tarjeta de evento para la vista pública de clientes.
+ * - <app-modal>   : modal genérico con slot, usado para formularios y detalles Operations.
+ * - <evento-card> : tarjeta de evento para la vista pública de clientes.
  */
 
 class AppModal extends HTMLElement {
@@ -38,27 +38,24 @@ class AppModal extends HTMLElement {
                 }
                 .head {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    padding: 1.1rem 1.4rem;
+                    justify-content: space-between;
+                    padding: 1rem 1.25rem;
                     border-bottom: 1px solid #e2e8f0;
                 }
-                .head h3 { margin: 0; font-size: 1.05rem; color: #6f0000; }
-                .close-btn {
-                    border: none;
-                    background: transparent;
-                    font-size: 1.3rem;
-                    cursor: pointer;
-                    color: #777;
-                    line-height: 1;
+                .head h3 { margin: 0; font-size: 1.15rem; color: #1e293b; font-weight: 600; }
+                .btn-close {
+                    background: none; border: none; font-size: 1.25rem; color: #64748b;
+                    cursor: pointer; padding: 0.2rem; line-height: 1; transition: color 0.2s;
                 }
-                .body { padding: 1.4rem; }
+                .btn-close:hover { color: #0f172a; }
+                .body { padding: 1.25rem; }
             </style>
             <div class="overlay">
                 <div class="box">
                     <div class="head">
-                        <h3></h3>
-                        <button class="close-btn" aria-label="Cerrar">&times;</button>
+                        <h3 id="modal-titulo"></h3>
+                        <button class="btn-close">&times;</button>
                     </div>
                     <div class="body">
                         <slot></slot>
@@ -67,32 +64,19 @@ class AppModal extends HTMLElement {
             </div>
         `;
         this._overlay = shadow.querySelector('.overlay');
-        this._titulo = shadow.querySelector('.head h3');
-        shadow.querySelector('.close-btn').addEventListener('click', () => this.cerrar());
-        this._overlay.addEventListener('click', (e) => {
-            if (e.target === this._overlay) this.cerrar();
-        });
-    }
-
-    static get observedAttributes() { return ['titulo']; }
-
-    attributeChangedCallback(name, _old, val) {
-        if (name === 'titulo' && this._titulo) this._titulo.textContent = val;
+        this._tituloEl = shadow.querySelector('#modal-titulo');
+        shadow.querySelector('.btn-close').addEventListener('click', () => this.cerrar());
+        this._overlay.addEventListener('click', (e) => { if (e.target === this._overlay) this.cerrar(); });
     }
 
     connectedCallback() {
-        if (this.hasAttribute('titulo')) this._titulo.textContent = this.getAttribute('titulo');
+        if (this.hasAttribute('titulo')) {
+            this._tituloEl.textContent = this.getAttribute('titulo');
+        }
     }
 
-    abrir() {
-        this._overlay.classList.add('visible');
-        this.dispatchEvent(new CustomEvent('modal-abierto'));
-    }
-
-    cerrar() {
-        this._overlay.classList.remove('visible');
-        this.dispatchEvent(new CustomEvent('modal-cerrado'));
-    }
+    abrir() { this._overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+    cerrar() { this._overlay.classList.remove('visible'); document.body.style.overflow = ''; }
 }
 customElements.define('app-modal', AppModal);
 
@@ -103,57 +87,49 @@ class EventoCard extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.innerHTML = `
             <style>
-                :host {
-                    all: initial;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                }
+                :host { display: block; }
                 .card {
-                    background: #fff;
+                    background: #ffffff;
                     border-radius: 12px;
                     overflow: hidden;
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+                    border: 1px solid #e2e8f0;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    transition: transform 0.15s ease;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 }
-                .card:hover { transform: translateY(-4px); }
-                img { width: 100%; height: 160px; object-fit: cover; display: block; }
-                .info { padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+                .card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+                .img-container { position: relative; width: 100%; pt: 56.25%; aspect-ratio: 16/9; background: #e2e8f0; }
+                .img-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
                 .badge {
-                    align-self: flex-start;
-                    background: #ffe5e5;
-                    color: #b90000;
-                    font-size: 0.7rem;
-                    padding: 3px 10px;
-                    border-radius: 12px;
-                    font-weight: 600;
+                    position: absolute; top: 12px; left: 12px; background: rgba(111, 0, 0, 0.9);
+                    color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
                 }
-                h4 { margin: 0.2rem 0 0; font-size: 1rem; color: #222; }
-                .meta { font-size: 0.8rem; color: #777; }
-                .precio { font-size: 1.1rem; font-weight: 700; color: #6f0000; margin-top: auto; }
-                .actions { display: flex; gap: 0.5rem; padding: 0 1rem 1rem; }
+                .content { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
+                .content h4 { margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #1e293b; line-height: 1.4; }
+                .meta { font-size: 0.85rem; color: #64748b; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
+                .precio { font-size: 1.2rem; font-weight: 700; color: #6f0000; margin-top: auto; padding-top: 0.75rem; }
+                .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; }
                 button {
-                    flex: 1;
-                    padding: 0.55rem;
-                    border-radius: 6px;
-                    border: none;
-                    cursor: pointer;
-                    font-weight: 600;
-                    font-size: 0.82rem;
+                    padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+                    transition: all 0.2s; border: none;
                 }
-                .btn-detalle { background: #eef2f5; color: #333; }
-                .btn-carrito { background: #b90000; color: #fff; }
-                .btn-detalle:hover { background: #dfe6ea; }
-                .btn-carrito:hover { background: #8a0000; }
+                .btn-detalle { background: #f1f5f9; color: #334155; }
+                .btn-detalle:hover { background: #e2e8f0; }
+                .btn-carrito { background: #6f0000; color: #ffffff; }
+                .btn-carrito:hover { background: #b90000; }
             </style>
             <div class="card">
-                <img>
-                <div class="info">
+                <div class="img-container">
                     <span class="badge"></span>
+                    <img>
+                </div>
+                <div class="content">
                     <h4></h4>
-                    <span class="meta ciudad"></span>
-                    <span class="meta fecha"></span>
+                    <div class="meta ciudad"></div>
+                    <div class="meta fecha"></div>
                     <span class="precio"></span>
                 </div>
                 <div class="actions">
@@ -174,8 +150,13 @@ class EventoCard extends HTMLElement {
     set evento(data) {
         this._evento = data;
         const s = this._shadow;
-        s.querySelector('img').src = data.imagen;
-        s.querySelector('img').onerror = function () { this.src = 'https://picsum.photos/500/300'; };
+        
+        // Carga dinámica limpia de imágenes (Base64 o ruta local sin interrupciones forzadas)
+        s.querySelector('img').src = data.imagen ? data.imagen : Store.IMAGE_PLACEHOLDER;
+        s.querySelector('img').onerror = function () { 
+            this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23cccccc'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23666666'>Imagen no encontrada</text></svg>"; 
+        };
+        
         s.querySelector('.badge').textContent = data.categoria;
         s.querySelector('h4').textContent = data.nombre;
         s.querySelector('.ciudad').textContent = `📍 ${data.ciudad}`;

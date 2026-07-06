@@ -37,190 +37,243 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
 
-            if (pageTitle) pageTitle.textContent = target === 'inicio' ? 'Dashboard General' : this.textContent.trim();
-            document.querySelector('.dashboard-container')?.classList.remove('sidebar-open');
+            if (pageTitle) pageTitle.textContent = target === 'inicio' ? 'Dashboard General' : target.charAt(0).toUpperCase() + target.slice(1);
         });
     });
 
-    document.getElementById('menu-toggle')?.addEventListener('click', () => {
-        document.querySelector('.dashboard-container').classList.toggle('sidebar-open');
+    // --- REINICIAR TODO ---
+    document.getElementById('btn-reset-datos').addEventListener('click', () => {
+        if (confirm('¿Seguro que deseas restaurar la base de datos de pruebas inicial?')) {
+            Store.reiniciar();
+        }
     });
 
-    document.getElementById('btn-reiniciar-datos').addEventListener('click', async () => {
-        if (!confirm('Esto borrará los datos guardados y volverá a cargar data/inicial.json. ¿Continuar?')) return;
-        appData = await Store.reiniciar();
-        renderizarTodo();
-        alert('Datos reiniciados desde data/inicial.json.');
-    });
-
-    window.addEventListener('datosActualizados', (e) => {
-        appData = e.detail;
-        renderizarTodo();
-    });
 
     // ============================================================
-    // RENDER GENERAL
+    // PANEL DE INICIO (MÉTRICAS)
     // ============================================================
-    function renderizarTodo() {
-        renderInicio();
-        renderCategorias();
-        renderEventos();
-        renderVentas();
-    }
+    const metricRecaudacion = document.getElementById('metric-recaudacion');
+    const metricEntradas = document.getElementById('metric-entradas');
+    const metricEventos = document.getElementById('metric-eventos');
+    const txtMetaActual = document.getElementById('meta-actual');
+    const txtMetaObjetivo = document.getElementById('meta-objetivo');
+    const barMetaProgress = document.getElementById('meta-progress-bar');
+    const txtMetaPorcentaje = document.getElementById('meta-porcentaje-texto');
+    const inputMeta = document.getElementById('input-meta-ventas');
+    const btnMeta = document.getElementById('btn-guardar-meta');
+    const gridCatResumen = document.getElementById('grid-categorias-resumen');
 
-    function renderInicio() {
-        const totalVentas = appData.ventas.reduce((sum, v) => sum + v.total, 0);
-        document.getElementById('metric-categorias').textContent = appData.categorias.length;
-        document.getElementById('metric-eventos').textContent = appData.eventos.length;
-        document.getElementById('metric-ventas').textContent = Store.formatoMoneda(totalVentas);
-
-        const porcentaje = appData.metaVentas > 0 ? Math.min(Math.round((totalVentas / appData.metaVentas) * 100), 100) : 0;
-        document.getElementById('progress-text').textContent = `${porcentaje}%`;
-        document.getElementById('summary-recaudado').textContent = Store.formatoMoneda(totalVentas);
-        document.getElementById('summary-meta').textContent = Store.formatoMoneda(appData.metaVentas);
-        const bar = document.getElementById('progress-circle-bar');
-        if (bar) bar.style.background = `conic-gradient(var(--accent-orange) ${porcentaje}%, var(--bg-main) ${porcentaje}%)`;
-
-        const ventasOrdenadas = [...appData.ventas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
-        const tbody = document.querySelector('#table-recientes tbody');
-        tbody.innerHTML = '';
-        ventasOrdenadas.slice(0, 4).forEach(v => {
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong style="color:var(--accent-blue)">${v.id}</strong></td>
-                    <td>${v.cliente?.nombre ?? '-'}</td>
-                    <td><span class="badge-cat">${v.ciudad}</span></td>
-                    <td><strong>${Store.formatoMoneda(v.total)}</strong></td>
-                    <td>${new Date(v.fecha).toLocaleString('es-CO')}</td>
-                </tr>`;
+    function renderMetricasInicio() {
+        let recaudacion = 0;
+        let tktVendidos = 0;
+        appData.ventas.forEach(v => {
+            recaudacion += v.total || 0;
+            if (v.items) {
+                v.items.forEach(it => tktVendidos += (it.cantidad || 0));
+            }
         });
 
-        const tbodyEventos = document.querySelector('#table-eventos-recientes tbody');
-        tbodyEventos.innerHTML = '';
-        [...appData.eventos].reverse().slice(0, 4).forEach(ev => {
-            tbodyEventos.innerHTML += `
-                <tr>
-                    <td><strong>${ev.nombre}</strong></td>
-                    <td><span class="badge-cat">${ev.categoria}</span></td>
-                    <td>${ev.ciudad}</td>
-                    <td>${ev.fecha}</td>
-                    <td>${Store.formatoMoneda(ev.precio)}</td>
-                </tr>`;
-        });
+        if (metricRecaudacion) metricRecaudacion.textContent = Store.formatoMoneda(recaudacion);
+        if (metricEntradas) metricEntradas.textContent = tktVendidos;
+        if (metricEventos) metricEventos.textContent = appData.eventos.length;
 
-        const contCatInicio = document.getElementById('container-categorias-inicio');
-        contCatInicio.innerHTML = appData.categorias.length
-            ? appData.categorias.map(c => `<span class="badge-cat badge-cat-inicio"><i class="fa-solid fa-folder"></i> ${c.nombre}</span>`).join('')
-            : '<p style="color:var(--text-muted)">Aún no hay categorías registradas.</p>';
+        let objMeta = appData.metaVentas || 0;
+        if (txtMetaActual) txtMetaActual.textContent = Store.formatoMoneda(recaudacion);
+        if (txtMetaObjetivo) txtMetaObjetivo.textContent = `Meta: ${Store.formatoMoneda(objMeta)}`;
+
+        let pct = objMeta > 0 ? Math.min(100, (recaudacion / objMeta) * 100) : 0;
+        if (barMetaProgress) barMetaProgress.style.width = `${pct}%`;
+        if (txtMetaPorcentaje) txtMetaPorcentaje.textContent = `${pct.toFixed(1)}% de la meta alcanzada`;
+        if (inputMeta) inputMeta.value = objMeta || '';
+
+        if (gridCatResumen) {
+            gridCatResumen.innerHTML = '';
+            appData.categorias.forEach(cat => {
+                let cont = appData.eventos.filter(e => e.categoria === cat.nombre).length;
+                gridCatResumen.innerHTML += `
+                    <div class="item-cat-mini">
+                        <span>${cat.nombre}</span>
+                        <span class="badge-cat-inicio">${cont} ev.</span>
+                    </div>`;
+            });
+        }
     }
+
+    if (btnMeta) {
+        btnMeta.addEventListener('click', () => {
+            let val = parseFloat(inputMeta.value) || 0;
+            appData.metaVentas = val;
+            Store.guardar();
+            renderMetricasInicio();
+            alert('Meta actualizada correctamente.');
+        });
+    }
+
 
     // ============================================================
     // CATEGORÍAS
     // ============================================================
+    const tbodyCategorias = document.getElementById('tbody-categorias');
     const modalCategoria = document.getElementById('modal-categoria');
     const formCategoria = document.getElementById('form-categoria');
 
     function renderCategorias() {
-        const cont = document.getElementById('container-categorias');
-        cont.innerHTML = '';
-        if (appData.categorias.length === 0) {
-            cont.innerHTML = '<p style="color:var(--text-muted)">No hay categorías registradas todavía.</p>';
-        }
-        appData.categorias.forEach((c) => {
-            cont.innerHTML += `
-                <div class="card card-categoria-dinamica">
-                    <div>
-                        <span><i class="fa-solid fa-folder"></i> <strong>${c.nombre}</strong></span>
-                        <p class="categoria-descripcion">${c.descripcion ?? ''}</p>
-                    </div>
-                    <div class="categoria-acciones">
-                        <button data-id="${c.id}" class="btn-icon btn-edit-cat" title="Editar"><i class="fa-solid fa-pen"></i></button>
-                        <button data-id="${c.id}" class="btn-icon btn-delete-cat" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>`;
+        if (!tbodyCategorias) return;
+        tbodyCategorias.innerHTML = '';
+        appData.categorias.forEach(cat => {
+            tbodyCategorias.innerHTML += `
+                <tr>
+                    <td><strong>${cat.nombre}</strong></td>
+                    <td>${cat.descripcion}</td>
+                    <td>
+                        <button data-id="${cat.id}" class="btn-icon btn-edit-cat" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                        <button data-id="${cat.id}" class="btn-icon btn-delete-cat" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
         });
 
-        cont.querySelectorAll('.btn-delete-cat').forEach(btn => {
-            btn.addEventListener('click', () => eliminarCategoria(btn.dataset.id));
-        });
-        cont.querySelectorAll('.btn-edit-cat').forEach(btn => {
-            btn.addEventListener('click', () => abrirModalCategoria(btn.dataset.id));
+        // Eventos delegados edición
+        document.querySelectorAll('.btn-edit-cat').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const cat = appData.categorias.find(c => c.id === id);
+                if (cat && modalCategoria) {
+                    document.getElementById('cat-id').value = cat.id;
+                    document.getElementById('cat-nombre').value = cat.nombre;
+                    document.getElementById('cat-descripcion').value = cat.descripcion;
+                    modalCategoria.abrir();
+                }
+            });
         });
 
-        // Actualiza el <select> del formulario de eventos
-        const selectCat = document.getElementById('ev-categoria');
-        const seleccionActual = selectCat.value;
-        selectCat.innerHTML = '<option value="" disabled selected>Seleccione categoría</option>';
-        appData.categorias.forEach(c => {
-            selectCat.innerHTML += `<option value="${c.nombre}">${c.nombre}</option>`;
+        // Eventos delegados eliminación
+        document.querySelectorAll('.btn-delete-cat').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const cat = appData.categorias.find(c => c.id === id);
+                if (!cat) return;
+
+                let asoc = appData.eventos.some(e => e.categoria === cat.nombre);
+                if (asoc) {
+                    alert('No puedes eliminar la categoría porque hay eventos asociados a ella.');
+                    return;
+                }
+
+                if (confirm(`¿Eliminar la categoría "${cat.nombre}"?`)) {
+                    appData.categorias = appData.categorias.filter(c => c.id !== id);
+                    Store.guardar();
+                    renderCategorias();
+                    renderMetricasInicio();
+                    actualizarSelectCategorias();
+                }
+            });
         });
-        if (seleccionActual) selectCat.value = seleccionActual;
     }
 
-    function abrirModalCategoria(id = null) {
-        formCategoria.reset();
-        document.getElementById('cat-id').value = '';
-        if (id) {
-            const cat = appData.categorias.find(c => c.id === id);
-            if (!cat) return;
-            modalCategoria.setAttribute('titulo', 'Editar Categoría');
-            document.getElementById('cat-id').value = cat.id;
-            document.getElementById('cat-nombre').value = cat.nombre;
-            document.getElementById('cat-descripcion').value = cat.descripcion ?? '';
-        } else {
-            modalCategoria.setAttribute('titulo', 'Agregar Categoría');
-        }
-        modalCategoria.abrir();
+    if (document.getElementById('btn-nueva-categoria')) {
+        document.getElementById('btn-nueva-categoria').addEventListener('click', () => {
+            if (formCategoria) formCategoria.reset();
+            document.getElementById('cat-id').value = '';
+            if (modalCategoria) modalCategoria.abrir();
+        });
     }
 
-    document.getElementById('btn-add-categoria').addEventListener('click', () => abrirModalCategoria());
+    if (formCategoria) {
+        formCategoria.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('cat-id').value;
+            const nombre = document.getElementById('cat-nombre').value.trim();
+            const descripcion = document.getElementById('cat-descripcion').value.trim();
 
-    formCategoria.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = document.getElementById('cat-id').value;
-        const nombre = document.getElementById('cat-nombre').value.trim();
-        const descripcion = document.getElementById('cat-descripcion').value.trim();
-        if (!nombre) return;
+            if (id) {
+                const cat = appData.categorias.find(c => c.id === id);
+                if (cat) {
+                    if (cat.nombre !== nombre) {
+                        appData.eventos.forEach(ev => {
+                            if (ev.categoria === cat.nombre) ev.categoria = nombre;
+                        });
+                    }
+                    cat.nombre = nombre;
+                    cat.descripcion = descripcion;
+                }
+            } else {
+                appData.categorias.push({
+                    id: Store.generarId('cat'),
+                    nombre,
+                    descripcion
+                });
+            }
 
-        if (id) {
-            const cat = appData.categorias.find(c => c.id === id);
-            cat.nombre = nombre;
-            cat.descripcion = descripcion;
-            alert('Categoría actualizada exitosamente.');
-        } else {
-            appData.categorias.push({ id: Store.generarId('cat'), nombre, descripcion });
-            alert('Categoría añadida exitosamente.');
-        }
-        Store.guardar();
-        modalCategoria.cerrar();
-    });
-
-    function eliminarCategoria(id) {
-        if (!confirm('¿Eliminar esta categoría?')) return;
-        appData.categorias = appData.categorias.filter(c => c.id !== id);
-        Store.guardar();
-        alert('Categoría eliminada.');
+            Store.guardar();
+            if (modalCategoria) modalCategoria.cerrar();
+            renderCategorias();
+            renderMetricasInicio();
+            actualizarSelectCategorias();
+        });
     }
+
 
     // ============================================================
     // EVENTOS
     // ============================================================
+    const fileInput = document.getElementById('ev-imagen');
+    const hiddenInput = document.getElementById('ev-imagen-base64');
+    const imgPreview = document.getElementById('ev-imagen-preview');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    if (hiddenInput) hiddenInput.value = evt.target.result;
+                    if (imgPreview) {
+                        imgPreview.src = evt.target.result;
+                        imgPreview.style.display = 'block';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     const formEventos = document.getElementById('form-eventos');
-    const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion-evento');
+    const selectEvCat = document.getElementById('ev-categoria');
+    const selectEvCiudad = document.getElementById('ev-ciudad');
+    const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion-ev');
+
+    function actualizarSelectCategorias() {
+        if (!selectEvCat) return;
+        selectEvCat.innerHTML = '<option value="">Seleccione...</option>';
+        appData.categorias.forEach(c => {
+            selectEvCat.innerHTML += `<option value="${c.nombre}">${c.nombre}</option>`;
+        });
+    }
+
+    function inicializarSelectCiudades() {
+        if (!selectEvCiudad) return;
+        selectEvCiudad.innerHTML = '<option value="">Seleccione...</option>';
+        Store.CIUDADES.forEach(c => {
+            selectEvCiudad.innerHTML += `<option value="${c}">${c}</option>`;
+        });
+    }
 
     function renderEventos() {
         const cont = document.getElementById('container-eventos-lista');
+        if (!cont) return;
         cont.innerHTML = '';
+
         if (appData.eventos.length === 0) {
-            cont.innerHTML = '<p style="color:var(--text-muted)">No hay eventos registrados todavía.</p>';
+            cont.innerHTML = '<p style="color:var(--text-muted); padding:1rem;">No hay eventos registrados todavía.</p>';
+            return;
         }
+
         appData.eventos.forEach(ev => {
             cont.innerHTML += `
                 <div class="evento-fila-dinamica">
-                    <img src="${ev.imagen}" onerror="this.src='https://picsum.photos/300/200'">
+                    <img src="${ev.imagen ? ev.imagen : Store.IMAGE_PLACEHOLDER}" alt="${ev.nombre}">
                     <div class="evento-info-texto">
-                        <h4>${ev.nombre} <span class="badge-cat">${ev.codigo}</span></h4>
+                        <h4>${ev.nombre} <span class="badge-cat" style="background:#f1f5f9; color:var(--sidebar-bg); font-size:0.7rem; padding:2px 6px; border-radius:4px;">${ev.codigo}</span></h4>
                         <p>${ev.categoria} · ${ev.ciudad} · ${ev.fecha} ${ev.hora}</p>
                         <strong>${Store.formatoMoneda(ev.precio)}</strong>
                     </div>
@@ -231,13 +284,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>`;
         });
 
-        cont.querySelectorAll('.btn-delete-ev').forEach(btn => btn.addEventListener('click', () => eliminarEvento(btn.dataset.id)));
-        cont.querySelectorAll('.btn-edit-ev').forEach(btn => btn.addEventListener('click', () => cargarEventoParaEditar(btn.dataset.id)));
+        document.querySelectorAll('.btn-edit-ev').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                cargarEventoParaEditar(id);
+            });
+        });
+
+        document.querySelectorAll('.btn-delete-ev').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                if (confirm('¿Estás seguro de eliminar este concierto?')) {
+                    appData.eventos = appData.eventos.filter(e => e.id !== id);
+                    Store.guardar();
+                    renderEventos();
+                    renderMetricasInicio();
+                }
+            });
+        });
     }
 
     function cargarEventoParaEditar(id) {
         const ev = appData.eventos.find(e => e.id === id);
         if (!ev) return;
+
         document.getElementById('ev-id').value = ev.id;
         document.getElementById('ev-codigo').value = ev.codigo;
         document.getElementById('ev-nombre').value = ev.nombre;
@@ -246,96 +316,120 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('ev-fecha').value = ev.fecha;
         document.getElementById('ev-hora').value = ev.hora;
         document.getElementById('ev-ciudad').value = ev.ciudad;
-        document.getElementById('ev-imagen').value = ev.imagen;
+
+        if (hiddenInput) hiddenInput.value = ev.imagen || '';
+        if (imgPreview) {
+            if (ev.imagen) {
+                imgPreview.src = ev.imagen;
+                imgPreview.style.display = 'block';
+            } else {
+                imgPreview.style.display = 'none';
+            }
+        }
+        if (fileInput) fileInput.value = '';
+
         document.getElementById('ev-descripcion').value = ev.descripcion;
 
         document.getElementById('form-eventos-titulo').innerHTML = '<i class="fa-solid fa-pen"></i> Editar Evento';
         document.getElementById('btn-guardar-evento').textContent = 'Actualizar Evento';
-        btnCancelarEdicion.style.display = 'block';
-        document.querySelector('[data-target="eventos"]').click();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (btnCancelarEdicion) btnCancelarEdicion.style.display = 'block';
     }
 
     function resetFormEventos() {
-        formEventos.reset();
+        if (formEventos) formEventos.reset();
         document.getElementById('ev-id').value = '';
+        if (hiddenInput) hiddenInput.value = '';
+        if (imgPreview) {
+            imgPreview.src = '';
+            imgPreview.style.display = 'none';
+        }
         document.getElementById('form-eventos-titulo').innerHTML = '<i class="fa-solid fa-calendar-plus"></i> Registrar Nuevo Evento';
         document.getElementById('btn-guardar-evento').textContent = 'Guardar Evento';
-        btnCancelarEdicion.style.display = 'none';
+        if (btnCancelarEdicion) btnCancelarEdicion.style.display = 'none';
     }
 
-    btnCancelarEdicion.addEventListener('click', resetFormEventos);
-
-    formEventos.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const id = document.getElementById('ev-id').value;
-        const datos = {
-            codigo: document.getElementById('ev-codigo').value.trim(),
-            nombre: document.getElementById('ev-nombre').value.trim(),
-            categoria: document.getElementById('ev-categoria').value,
-            precio: parseFloat(document.getElementById('ev-precio').value),
-            fecha: document.getElementById('ev-fecha').value,
-            hora: document.getElementById('ev-hora').value,
-            ciudad: document.getElementById('ev-ciudad').value,
-            imagen: document.getElementById('ev-imagen').value.trim(),
-            descripcion: document.getElementById('ev-descripcion').value.trim()
-        };
-
-        if (id) {
-            const ev = appData.eventos.find(e => e.id === id);
-            Object.assign(ev, datos);
-            alert('Evento actualizado correctamente.');
-        } else {
-            appData.eventos.push({ id: Store.generarId('ev'), ...datos });
-            alert('Evento guardado correctamente.');
-        }
-        Store.guardar();
-        resetFormEventos();
-    });
-
-    function eliminarEvento(id) {
-        if (!confirm('¿Eliminar este evento?')) return;
-        appData.eventos = appData.eventos.filter(e => e.id !== id);
-        Store.guardar();
-        alert('Evento eliminado.');
+    if (btnCancelarEdicion) {
+        btnCancelarEdicion.addEventListener('click', resetFormEventos);
     }
 
+    if (formEventos) {
+        formEventos.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('ev-id').value;
+
+            const datos = {
+                codigo: document.getElementById('ev-codigo').value.trim(),
+                nombre: document.getElementById('ev-nombre').value.trim(),
+                categoria: document.getElementById('ev-categoria').value,
+                precio: parseFloat(document.getElementById('ev-precio').value) || 0,
+                fecha: document.getElementById('ev-fecha').value,
+                hora: document.getElementById('ev-hora').value,
+                ciudad: document.getElementById('ev-ciudad').value,
+                imagen: hiddenInput ? hiddenInput.value.trim() : '',
+                descripcion: document.getElementById('ev-descripcion').value.trim()
+            };
+
+            if (id) {
+                const ev = appData.eventos.find(e => e.id === id);
+                if (ev) Object.assign(ev, datos);
+            } else {
+                appData.eventos.push({
+                    id: Store.generarId('ev'),
+                    ...datos
+                });
+            }
+
+            Store.guardar();
+            resetFormEventos();
+            renderEventos();
+            renderMetricasInicio();
+            alert('Evento procesado de manera correcta.');
+        });
+    }
+
+
     // ============================================================
-    // VENTAS
+    // HISTORIAL DE VENTAS
     // ============================================================
+    const tableVentas = document.getElementById('table-ventas-completa');
     const modalDetalleVenta = document.getElementById('modal-detalle-venta');
 
     function renderVentas() {
-        const tbody = document.querySelector('#table-ventas-completa tbody');
+        if (!tableVentas) return;
+        const tbody = tableVentas.querySelector('tbody');
         tbody.innerHTML = '';
-        const ventasOrdenadas = [...appData.ventas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-        if (ventasOrdenadas.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted)">Aún no hay ventas registradas.</td></tr>';
+        if (appData.ventas.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No existen ventas en el historial corporativo.</td></tr>';
             return;
         }
 
-        ventasOrdenadas.forEach(v => {
+        const copiaVentas = [...appData.ventas].sort((a, b) => b.fecha - a.fecha);
+
+        copiaVentas.forEach(v => {
             tbody.innerHTML += `
                 <tr>
-                    <td><strong style="color:var(--accent-blue)">${v.id}</strong></td>
-                    <td>${new Date(v.fecha).toLocaleString('es-CO')}</td>
-                    <td><span class="badge-cat">${v.ciudad}</span></td>
-                    <td>${v.cliente?.nombre ?? '-'}</td>
+                    <td><code>${v.id}</code></td>
+                    <td>${new Date(v.fecha).toLocaleDateString('es-CO')}</td>
+                    <td>${v.ciudad || 'N/A'}</td>
+                    <td>${v.cliente?.nombre || 'Anónimo'}</td>
                     <td><strong>${Store.formatoMoneda(v.total)}</strong></td>
-                    <td><button class="btn-icon btn-ver-venta" data-id="${v.id}" title="Ver detalle"><i class="fa-solid fa-eye"></i></button></td>
+                    <td><button data-id="${v.id}" class="btn-action btn-ver-detalle" style="padding:0.4rem 0.8rem; font-size:0.75rem;"><i class="fa-solid fa-eye"></i> Detalles</button></td>
                 </tr>`;
         });
 
-        tbody.querySelectorAll('.btn-ver-venta').forEach(btn => {
-            btn.addEventListener('click', () => mostrarDetalleVenta(btn.dataset.id));
+        document.querySelectorAll('.btn-ver-detalle').forEach(btn => {
+            btn.addEventListener('click', function () {
+                verDetallePedido(this.getAttribute('data-id'));
+            });
         });
     }
 
-    function mostrarDetalleVenta(id) {
+    function verDetallePedido(id) {
         const venta = appData.ventas.find(v => v.id === id);
-        if (!venta) return;
-        const itemsHtml = venta.items.map(it => `
+        if (!venta || !modalDetalleVenta) return;
+
+        let itemsHtml = venta.items.map(it => `
             <tr>
                 <td>${it.nombre}</td>
                 <td>${it.cantidad}</td>
@@ -365,5 +459,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         modalDetalleVenta.abrir();
     }
 
-    renderizarTodo();
+    // --- INICIALIZACIÓN MÓDULOS DEL PANEL ---
+    renderMetricasInicio();
+    renderCategorias();
+    actualizarSelectCategorias();
+    inicializarSelectCiudades();
+    renderEventos();
+    renderVentas();
 });
