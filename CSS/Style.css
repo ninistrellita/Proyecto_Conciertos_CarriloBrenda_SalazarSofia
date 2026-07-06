@@ -232,3 +232,10 @@ body {
     .site-header { padding: 1rem; }
     .filtros-bar, .contenedor-eventos { padding-left: 1rem; padding-right: 1rem; }
 }
+
+.btn-login-header {
+    background: rgba(255,255,255,0.25);
+    padding: 10px;
+    border-radius: 15px;
+    color: #f7f8fa;
+}
