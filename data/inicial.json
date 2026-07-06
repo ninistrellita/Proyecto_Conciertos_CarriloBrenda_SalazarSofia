@@ -8,58 +8,109 @@
   "eventos": [
     {
       "id": "ev-1",
-      "codigo": "MORAT-2026",
-      "nombre": "Morat - Antes de que Amanezca",
-      "categoria": "Música",
-      "precio": 120000,
-      "fecha": "2026-10-18",
-      "hora": "19:30",
-      "ciudad": "Bogotá",
-      "imagen": "evento6.jpg",
-      "descripcion": "La banda de pop rock en español más importante del momento presenta su espectacular gira de estadios."
+      "codigo": "RICARDO-QUEVEDO-CUCUTA",
+      "nombre": "Ricardo Quevedo - Caer con Estilo",
+      "categoria": "Entretenimiento",
+      "precio": 0,
+      "fecha": "17 de Julio",
+      "hora": "7:30 PM",
+      "ciudad": "Cúcuta",
+      "imagen": "evento1.jpeg",
+      "descripcion": "Show de Stand-Up Comedy Organiza Like Entretenimiento. Info: 304 200 9545.",
+      "pulep": "GHD641"
     },
     {
       "id": "ev-2",
-      "codigo": "FEID-2026",
-      "nombre": "Feid - Ferxxocalipsis Tour",
-      "categoria": "Música",
-      "precio": 150000,
-      "fecha": "2026-11-05",
-      "hora": "20:00",
-      "ciudad": "Medellín",
-      "imagen": "evento7.jpg",
-      "descripcion": "El Ferxxo llega con el perreo más grande del año y una puesta en escena apocalíptica e inolvidable."
+      "codigo": "GUERRA-MINITECAS-CUCUTA",
+      "nombre": "Guerra de Minitecas 2.0 - Choque de Titanes",
+      "categoria": "Entretenimiento",
+      "precio": 0,
+      "fecha": "Sábado 11 de Julio",
+      "hora": "N/A",
+      "ciudad": "Cúcuta",
+      "imagen": "evento2.jpg",
+      "descripcion": "Macro Efectus Vs Tridimension. Puntos de venta: Nuestro Ticket, Hotel Ibis, Planeta Store.",
+      "pulep": "HEI695"
     },
     {
       "id": "ev-3",
-      "codigo": "DUA-2026",
-      "nombre": "Dua Lipa - Radical Optimism Tour",
+      "codigo": "LISS-PEREIRA-CUCUTA",
+      "nombre": "Liss Pereira - Latina Mente Volumen 2",
+      "categoria": "Entretenimiento",
+      "precio": 0,
+      "fecha": "Sábado 7 de Noviembre",
+      "hora": "8:00 PM",
+      "ciudad": "Cúcuta",
+      "imagen": "evento3.jpeg",
+      "descripcion": "Show de comedia stand-up en vivo en el Teatro Zulima.",
+      "pulep": "SSD351"
+    },
+    {
+      "id": "ev-4",
+      "codigo": "ALEX-ZURDO-CUCUTA",
+      "nombre": "Alex Zurdo en Concierto",
       "categoria": "Música",
-      "precio": 280000,
-      "fecha": "2026-12-12",
-      "hora": "21:00",
+      "precio": 0,
+      "fecha": "5 Sept 2026",
+      "hora": "7:00 PM",
+      "ciudad": "Cúcuta",
+      "imagen": "evento4.jpg",
+      "descripcion": "Invitados: Madiel Lara y El Sielvo Lio. Apoya Faro Loop y Sayco. Teléfono: 6019171010.",
+      "pulep": "VRU423"
+    },
+    {
+      "id": "ev-5",
+      "codigo": "BAILE-ANO-CENFER",
+      "nombre": "Baile del Año 2026",
+      "categoria": "Música",
+      "precio": 0,
+      "fecha": "28 Noviembre 2026",
+      "hora": "7:00 PM",
+      "ciudad": "Bucaramanga",
+      "imagen": "evento5.jpg",
+      "descripcion": "Billo's Caracas Boys VS Los Melódicos de Renato Capriles. Fenómenos Sabaneros.",
+      "pulep": "DBY711"
+    },
+    {
+      "id": "ev-6",
+      "codigo": "PLANCHA-SINFONICA-CUCUTA",
+      "nombre": "Plancha Sinfónica - Invitados Especiales",
+      "categoria": "Cultura",
+      "precio": 0,
+      "fecha": "Viernes 14 Agosto",
+      "hora": "N/A",
+      "ciudad": "Cúcuta",
+      "imagen": "evento6.jpg",
+      "descripcion": "Produce Vargas Music en el Teatro Zulima. Inf: 311 256 8583.",
+      "pulep": "TRT436"
+    },
+    {
+      "id": "ev-7",
+      "codigo": "VILMAPALMA-CUCUTA",
+      "nombre": "Vilma Palma e Vampiros - 35 Años de Música",
+      "categoria": "Música",
+      "precio": 0,
+      "fecha": "24 Octubre",
+      "hora": "N/A",
+      "ciudad": "Cúcuta",
+      "imagen": "evento7.jpg",
+      "descripcion": "Espectacular concierto conmemorativo de sus 35 años de trayectoria musical.",
+      "pulep": "YOX192"
+    },
+    {
+      "id": "ev-8",
+      "codigo": "BTS-ARIRANG-BOG",
+      "nombre": "BTS World Tour | Arirang",
+      "categoria": "Música",
+      "precio": 0,
+      "fecha": "2026-10-02 / 2026-10-03",
+      "hora": "N/A",
       "ciudad": "Bogotá",
       "imagen": "evento8.jpeg",
-      "descripcion": "La superestrella del pop británico llega para encender el escenario con sus mayores éxitos globales."
+      "descripcion": "BTS World Tour Arirang en vivo desde el Estadio El Campín de Bogotá (Vie y Sáb).",
+      "pulep": "JUS369"
     }
   ],
-  "ventas": [
-    {
-      "id": "V-9901",
-      "fecha": "2026-07-02T15:30:00",
-      "ciudad": "Bogotá",
-      "cliente": {
-        "identificacion": "1020304050",
-        "nombre": "Laura Gómez",
-        "direccion": "Calle 45 #12-30",
-        "telefono": "3001234567",
-        "email": "laura.gomez@mail.com"
-      },
-      "items": [
-        { "eventoId": "ev-1", "nombre": "Morat - Antes de que Amanezca", "precioUnit": 120000, "cantidad": 2, "subtotal": 240000 }
-      ],
-      "total": 240000
-    }
-  ],
+  "ventas": [],
   "metaVentas": 5000000
 }
