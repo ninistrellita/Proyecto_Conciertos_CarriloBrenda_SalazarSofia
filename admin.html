@@ -34,6 +34,11 @@
                     <li class="menu-item" data-target="ventas">
                         <a href="#ventas"><i class="fa-solid fa-cart-shopping"></i> Ventas</a>
                     </li>
+
+                    <!--OPCION EN MENU-BUZON SUGERENCIAS EXAMEN-->
+                    <li class="menu-item" data-target="sugerencias">
+                        <a href="#"><i class="fa-solid fa-comments"></i><span>Buzon de Sugerencias</span></a>
+                    </li>
                 </ul>
             </nav>
 
@@ -230,6 +235,29 @@
                 </div>
             </div>
 
+            <!--SECCION DE BUZON DE SUGERENCIAS EXAMEN-->
+            <div id="section-sugerencias" class="dashboard-section visual-hidden">
+                <div class="section-header-actions">
+                    <h3>Buzón de Sugerencias</h3>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="table-sugerencias">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Mensaje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-sugerencias"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!----------------------------------->
+
         </main>
     </div>
 
@@ -256,6 +284,7 @@
     <script src="JS/store.js"></script>
     <script src="JS/components.js"></script>
     <script src="JS/admin.js"></script>
+    <script src="JS/examen.js"></script>
 </body>
 
 </html>

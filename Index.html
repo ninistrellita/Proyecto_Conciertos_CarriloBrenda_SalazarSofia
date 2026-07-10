@@ -18,6 +18,13 @@
         <a href="admin.html" id="btn-login" class="btn-login-header">
             <i class="fa-solid fa-user-gear"></i> Iniciar Sesion
         </a>
+
+        <!--BOTON DE_FORMULARIO EXAMEN-->
+        <button id="btn-sugerencias" class="btn-carrito-header">
+            <i class="fa-solid fa-comment-dots"></i>Sugerencias
+        </button>
+        <!---------------------->
+
     </header>
 
     <section class="hero">
@@ -82,9 +89,34 @@
         </form>
     </app-modal>
 
+    <!--FORMULARIO-BUZON DE SUGERENCIAS EXAMEN-->
+    <app-modal id="modal-sugerencias" titulo="Buzon de sugerencias">
+        <form id="form-sugerencias" class="admin-form">
+            <div class="form-group">
+                <label for="sug-nombre">Nombre Completo</label>
+                <input type="text" id="sug-nombre" placeholder="Ej. Laura Gomez">
+            </div>
+            <div class="form-group">
+                <label for="sug-email">Correo Electronico</label>
+                <input type="email" id="sug-email" placeholder="laura@gmail.com">
+            </div>
+            <div class="form-group">
+                <label for="sug-mensaje">Tu Sugerencia o Comentario</label>
+                <textarea id="sug-mensaje" required rows="4" 
+                placeholder="¿Como podemos mejorar tu experiencia?"></textarea>
+            </div>
+            <button type="submit" class="btn-comprar btn-full">
+                <i class="fa-solid fa-paper-plane"></i> Enviar Sugerencia
+            </button>
+        </form>
+    </app-modal>
+    <!--------------------------------------->
+
     <script src="JS/store.js"></script>
     <script src="JS/components.js"></script>
     <script src="JS/carrito-compartido.js"></script>
     <script src="JS/cliente.js"></script>
+    <script src="JS/examen.js"></script>
+
 </body>
 </html>

@@ -13,7 +13,7 @@ window.Store = (function () {
         categorias: [],
         eventos: [],
         ventas: [],
-        metaVentas: 0
+        metaVentas: 0,
     };
 
     function generarId(prefijo) {
